@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Reduce Native</string>
+    <string name="action_settings">Settings</string>
+    <string name="send_command">Send</string>
+</resources>

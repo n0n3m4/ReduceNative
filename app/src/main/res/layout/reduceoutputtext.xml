@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content" tools:text="Do you want to define something?" android:background="@color/colorReduceBg" android:textColor="@color/colorTextReduce" android:textSize="16sp"
+    android:layout_marginTop="2dp" android:layout_marginBottom="2dp" android:textIsSelectable="true">
+</android.support.v7.widget.AppCompatTextView>

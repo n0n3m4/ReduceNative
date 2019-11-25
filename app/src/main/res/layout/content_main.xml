@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:context=".MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <android.support.v7.widget.RecyclerView android:id="@+id/reduceOutput" android:layout_width="0dp"
+        android:layout_height="0dp" android:layout_marginStart="8dp" android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp" android:layout_marginRight="8dp" android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/inputCommand" app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText android:id="@+id/inputCommand" android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" android:ems="10" android:inputType="textVisiblePassword"
+        app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@id/send_command"
+        app:layout_constraintStart_toEndOf="@+id/repeat_command" />
+
+    <android.support.v7.widget.AppCompatImageButton android:id="@+id/send_command" android:layout_width="wrap_content"
+        android:layout_height="0dp" android:src="@drawable/ic_send_black_24dp" android:background="@null"
+        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/reduceOutput"
+        app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/inputCommand" android:paddingLeft="4dp"
+        android:paddingStart="4dp" android:paddingRight="8dp"
+        android:paddingEnd="8dp" />
+    <android.support.v7.widget.AppCompatImageButton android:id="@+id/repeat_command" android:layout_width="wrap_content"
+        android:layout_height="0dp" android:src="@drawable/ic_restore_black_24dp" android:background="@null"
+        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/reduceOutput" android:paddingLeft="8dp"
+        android:paddingStart="8dp" android:paddingRight="4dp"
+        android:paddingEnd="4dp" app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toStartOf="@+id/inputCommand" />
+
+</android.support.constraint.ConstraintLayout>
