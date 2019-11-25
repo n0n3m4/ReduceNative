@@ -27,7 +27,6 @@ import android.view.View.MeasureSpec
 import android.view.ViewGroup
 
 
-
 class MainActivity : AppCompatActivity()
 {
 
@@ -41,28 +40,28 @@ class MainActivity : AppCompatActivity()
 	var proc: Process? = null;
 	var writer: PrintWriter? = null;
 	val reducePath: File
-		get() = File(applicationInfo.nativeLibraryDir,"libreduce.so");
+		get() = File(applicationInfo.nativeLibraryDir, "libreduce.so");
 	val reduceImgPath: File
-		get() = File(applicationInfo.nativeLibraryDir,"libreduce.img.so");
+		get() = File(applicationInfo.nativeLibraryDir, "libreduce.img.so");
 
 	@UiThread
 	fun datasetAppend(el: ListElement)
 	{
 		dataset.add(el)
-		reduceOutput.adapter.notifyItemInserted(dataset.size-1)
+		reduceOutput.adapter.notifyItemInserted(dataset.size - 1)
 		scrollDown()
 	}
 
 	var inputsPosted = 0
 	@UiThread
-	fun postInput(input:String): Boolean
+	fun postInput(input: String): Boolean
 	{
 		if ((writer == null) || (input == ""))
 			return false
 		else
 		{
 			inputsPosted++
-			datasetAppend(ListElement(input,TYPE_USER,inputsPosted))
+			datasetAppend(ListElement(input, TYPE_USER, inputsPosted))
 			writer!!.println(input + (if (!input.endsWith(';')) ";" else ""))
 			return true;
 		}
@@ -76,30 +75,29 @@ class MainActivity : AppCompatActivity()
 	}
 
 	@WorkerThread
-	fun readerThreadProc(br:BufferedReader)
+	fun readerThreadProc(br: BufferedReader)
 	{
-		var _s:String? = null
+		var _s: String? = null
 
 		// fancy!-out!-header
 		val LINESTART = "\u0002latex:\\black\$\\displaystyle "
 		// fancy!-out!-trailer
 		val LINEEND = "\$\u0005"
 
-		while ({_s=br.readLine();_s}()!=null)
+		while ({ _s = br.readLine();_s }() != null)
 		{
-			val s=_s!!
-			Log.v(TAG,s)
+			val s = _s!!
+			Log.v(TAG, s)
 			if (s.startsWith(LINESTART) && s.endsWith(LINEEND))
 			{
 				// This is a Latex output
-				val outline = s.substring(LINESTART.length,s.length-LINEEND.length)
-				runOnUiThread { datasetAppend(ListElement(outline,TYPE_LATEX,0)) }
-			}
-			else
+				val outline = s.substring(LINESTART.length, s.length - LINEEND.length)
+				runOnUiThread { datasetAppend(ListElement(outline, TYPE_LATEX, 0)) }
+			} else
 			{
 				// We skip empty lines
-				if (s!="")
-					runOnUiThread { datasetAppend(ListElement(s,TYPE_REDUCETEXT,0)) }
+				if (s != "")
+					runOnUiThread { datasetAppend(ListElement(s, TYPE_REDUCETEXT, 0)) }
 			}
 		}
 	}
@@ -113,17 +111,17 @@ class MainActivity : AppCompatActivity()
 	@WorkerThread
 	fun startReduce()
 	{
-		proc = ProcessBuilder(reducePath.absolutePath,"-i",reduceImgPath.absolutePath,"--texmacs").directory(filesDir).start()
+		proc = ProcessBuilder(reducePath.absolutePath, "-i", reduceImgPath.absolutePath, "--texmacs").directory(filesDir).start()
 		val reader = BufferedReader(InputStreamReader(proc!!.inputStream))
-		writer = PrintWriter(proc!!.outputStream,true)
+		writer = PrintWriter(proc!!.outputStream, true)
 		// Skip empty line
-		Log.v(TAG,reader.readLine())
+		Log.v(TAG, reader.readLine())
 		// Set line length to be 100M, so the line breaking occurs after our app dies completely
 		writer!!.println("linelength 100000000;")
 		// Skip output of linelength
-		Log.v(TAG,reader.readLine())
+		Log.v(TAG, reader.readLine())
 		// Now start the reader
-		Thread{ readerThreadProc(reader)}.start()
+		Thread { readerThreadProc(reader) }.start()
 	}
 
 	fun stopReduce()
@@ -136,18 +134,17 @@ class MainActivity : AppCompatActivity()
 	inner class ReduceOutputAdapter(val dataset: ArrayList<ListElement>) : RecyclerView.Adapter<ReduceOutputAdapter.ViewHolder>()
 	{
 		inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+
 		// Create new views (invoked by the layout manager)
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReduceOutputAdapter.ViewHolder
 		{
 			if (viewType == TYPE_LATEX)
 			{
 				return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.reduceoutput, parent, false))
-			}
-			else if (viewType == TYPE_USER)
+			} else if (viewType == TYPE_USER)
 			{
 				return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.reduceinput, parent, false))
-			}
-			else
+			} else
 				return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.reduceoutputtext, parent, false))
 		}
 
@@ -169,14 +166,12 @@ class MainActivity : AppCompatActivity()
 						else
 							scrollDown()
 					}
-				mathview.setDisplayText( "\$" + dataset[position].value + "\$")
-			}
-			else if (getItemViewType(position) == TYPE_USER)
+				mathview.setDisplayText("\$" + dataset[position].value + "\$")
+			} else if (getItemViewType(position) == TYPE_USER)
 			{
 				(holder.view as LinearLayout).findViewById<AppCompatTextView>(R.id.ri_linenum).text = "${dataset[position].linenum}: "
 				(holder.view as LinearLayout).findViewById<AppCompatTextView>(R.id.ri_content).text = dataset[position].value
-			}
-			else
+			} else
 			{
 				(holder.view as AppCompatTextView).text = dataset[position].value
 			}
@@ -207,8 +202,7 @@ class MainActivity : AppCompatActivity()
 			{
 				sendCurrentCommand();
 				true;
-			}
-			else
+			} else
 			{
 				false;
 			}
@@ -226,13 +220,11 @@ class MainActivity : AppCompatActivity()
 				if (idx >= 0 && idx < list.size)
 					inputCommand.setText(list[idx])
 				true;
-			}
-			else if (keyEvent.action == KeyEvent.ACTION_UP && (keyCode == KeyEvent.KEYCODE_ENTER))
+			} else if (keyEvent.action == KeyEvent.ACTION_UP && (keyCode == KeyEvent.KEYCODE_ENTER))
 			{
 				sendCurrentCommand();
 				true;
-			}
-			else
+			} else
 			{
 				false;
 			}
