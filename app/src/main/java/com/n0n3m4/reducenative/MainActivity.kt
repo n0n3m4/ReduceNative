@@ -214,6 +214,30 @@ class MainActivity : AppCompatActivity()
 			}
 		}
 
+		inputCommand.setOnKeyListener { _, keyCode, keyEvent ->
+			if (keyEvent.action == KeyEvent.ACTION_UP && (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN))
+			{
+				val list = dataset.filter { x -> x.type == TYPE_USER }.reversed().map { x -> x.value }.distinct()
+				var idx = list.indexOf(inputCommand.text.toString())
+				if (keyCode == KeyEvent.KEYCODE_DPAD_UP)
+					idx += 1
+				else
+					idx -= 1
+				if (idx >= 0 && idx < list.size)
+					inputCommand.setText(list[idx])
+				true;
+			}
+			else if (keyEvent.action == KeyEvent.ACTION_UP && (keyCode == KeyEvent.KEYCODE_ENTER))
+			{
+				sendCurrentCommand();
+				true;
+			}
+			else
+			{
+				false;
+			}
+		}
+
 		setSupportActionBar(toolbar)
 
 		send_command.setOnClickListener { view ->
